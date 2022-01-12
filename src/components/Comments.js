@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import Comment from "./Comment";
 
 function Comments() {
     let [comments, setComments] = useState([]);
@@ -17,11 +18,7 @@ function Comments() {
         <div>
 
             {
-                comments.map(com =>
-                    <div key={com.id}>
-                        Comments name : {com.name}
-                    </div>)
-            }
+                comments.map(com => <Comment com={com} />)}
         </div>
     );
 }

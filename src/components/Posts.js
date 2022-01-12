@@ -15,9 +15,9 @@ function Posts() {
         <div>
             {
                 posts.map(post =>
-                <div key={post.id}>
-                    Title: {post.title}
-                </div>)
+                    <div key={post.id}>
+                        Title: {post.title}
+                    </div>)
             }
 
 
