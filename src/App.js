@@ -1,32 +1,42 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
-
-import UserDetails from "./components/UserDetails/UserDetails";
-import Posts from "./components/Posts/Posts";
-import css from "./App.module.css";
+import Form from "./components/Form/Form";
 import Users from "./components/Users/Users";
-import {postService} from "./services/post.service";
+import {userService} from "./services/user.service";
 
 const App = () => {
-    const [user, setUser] = useState(null);
-    const [posts, setPosts] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [filteredUs, setFilteredUs] = useState([]);
 
-    const getUser = (user) => {
-        setUser(user)
-        setPosts([])
-    }
+    useEffect(() => {
+        userService.getAll().then(value => {
+            setUsers([...value])
+            setFilteredUs([...value])
+        })
+    }, [])
 
-    const getUserId = (id) => {
-        postService.getByUserId(id).then(value => setPosts([...value]))
+    const getFilter = (data) => {
+        let filterArr = [...users];
+
+        if (data.name) {
+            filterArr = filterArr.filter(user => user.name.includes(data.name))
+        }
+
+        if (data.username) {
+            filterArr = filterArr.filter(user => user.username.includes(data.username))
+        }
+
+        if (data.email) {
+            filterArr = filterArr.filter(user => user.email.includes(data.email))
+        }
+
+        setFilteredUs(filterArr)
     }
 
     return (
         <div>
-            <div className={css.wrap}>
-                <Users getUser={getUser}/>
-                {user && <UserDetails user={user} getUserId={getUserId}/>}
-            </div>
-            {!!posts.length && <Posts posts={posts}/>}
+            <Form getFilter={getFilter}/>
+            <Users users={filteredUs}/>
         </div>
     );
 };
